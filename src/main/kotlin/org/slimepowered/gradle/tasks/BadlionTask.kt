@@ -2,7 +2,7 @@ package org.slimepowered.gradle.tasks
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
-import org.slimepowered.gradle.utils.extension.BadlionExtension
+import org.slimepowered.gradle.extension.BadlionExtension
 import java.io.File
 
 open class BadlionTask : DefaultTask() {
@@ -30,12 +30,12 @@ open class BadlionTask : DefaultTask() {
 
         lateinit var badlionMappings: File
 
-        var gameMappings: File? = null
-
         var seargeMappings: File? = null
 
         var mcpMappings: File? = null
 
         var finalJar: File? = null
+
+        var gameSources: File? = null
     }
 }

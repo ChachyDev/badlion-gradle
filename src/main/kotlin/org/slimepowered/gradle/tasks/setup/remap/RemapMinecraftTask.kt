@@ -12,7 +12,6 @@ import net.md_5.specialsource.provider.ClassLoaderProvider
 import net.md_5.specialsource.provider.JarProvider
 import net.md_5.specialsource.provider.JointProvider
 import org.gradle.api.tasks.TaskAction
-import org.slimepowered.gradle.BadlionGradlePlugin
 import org.slimepowered.gradle.tasks.BadlionTask
 import java.io.File
 import java.net.URL
@@ -42,12 +41,10 @@ open class RemapMinecraftTask : BadlionTask() {
 
         val srgMapped = File(gameJarsDir, "${ext.minecraft.get()}-remapped-srg-and-badlion.jar")
 
-        finalJar = File(gameJarsDir, "${ext.minecraft.get()}-remapped-minecraft-srg-mcp-badlion.jar")
+        finalJar = File(gameJarsDir, "minecraft-${ext.minecraft.get()}.jar")
 
         specialsource(badlionMapped, srgMapped, listOf(seargeMappings!!))
         specialsource(srgMapped, finalJar!!, listOf(mcpMappings!!))
-
-        BadlionGradlePlugin.addLibrary(finalJar!!)
     }
 
     private fun specialsource(`in`: File, out: File, srgFile: List<File>, classpath: List<URL> = emptyList()) {

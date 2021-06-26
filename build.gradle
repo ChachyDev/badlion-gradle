@@ -42,4 +42,12 @@ dependencies {
 
     implementation "com.github.md-5:SpecialSource:7ec7d4818f"
     implementation "com.github.SlimePowered:Coordinate:140e4276e6"
+
+    implementation "org.bitbucket.mstrobel:procyon-compilertools:0.5.36"
+
+    implementation "net.fabricmc:cfr:0.0.3"
+
+    implementation "org.redundent:kotlin-xml-builder:1.7.3"
+
+    implementation "commons-codec:commons-codec:1.15"
 }

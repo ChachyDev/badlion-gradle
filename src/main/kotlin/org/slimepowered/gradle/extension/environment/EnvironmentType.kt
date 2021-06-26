@@ -1,4 +1,4 @@
-package org.slimepowered.gradle.utils.extension.environment
+package org.slimepowered.gradle.extension.environment
 
 enum class EnvironmentType {
     PRODUCTION,

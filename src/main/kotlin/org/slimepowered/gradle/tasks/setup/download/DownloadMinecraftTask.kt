@@ -16,10 +16,10 @@ import java.io.File
 open class DownloadMinecraftTask : BadlionTask() {
     @TaskAction
     fun run() {
-        minecraft(cachesDir, ext.minecraft.get())
+        minecraft(ext.minecraft.get())
     }
 
-    private fun minecraft(cacheDir: File, gameVersion: String) {
+    private fun minecraft(gameVersion: String) {
         val manifestUrl =
             runBlocking { http.get<MinecraftVersionManifests>(VERSION_MANIFEST).versions.find { it.id == gameVersion }?.url }
                 ?: error("Failed to find Minecraft $gameVersion, is it actually a Minecraft version?")

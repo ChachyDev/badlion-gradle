@@ -3,9 +3,9 @@ package org.slimepowered.gradle
 import io.ktor.util.collections.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.slimepowered.gradle.tasks.BadlionTask
 import org.slimepowered.gradle.tasks.BadlionTask.Companion.finalJar
 import org.slimepowered.gradle.tasks.setup.SetupTask
+import org.slimepowered.gradle.tasks.setup.source.GenerateSourceJar
 import org.slimepowered.gradle.tasks.setup.download.DownloadBadlionPatchesTask
 import org.slimepowered.gradle.tasks.setup.download.DownloadMinecraftTask
 import org.slimepowered.gradle.tasks.setup.patch.PatchMinecraftTask
@@ -13,7 +13,7 @@ import org.slimepowered.gradle.tasks.setup.remap.DownloadMappingsTask
 import org.slimepowered.gradle.tasks.setup.remap.RemapMinecraftTask
 import org.slimepowered.gradle.utils.constants.TASK_GROUP
 import org.slimepowered.gradle.utils.constants.TASK_OTHER
-import org.slimepowered.gradle.utils.extension.BadlionExtension
+import org.slimepowered.gradle.extension.BadlionExtension
 import java.io.File
 
 class BadlionGradlePlugin : Plugin<Project> {
@@ -28,6 +28,9 @@ class BadlionGradlePlugin : Plugin<Project> {
             mavenCentral()
             maven {
                 it.setUrl("https://libraries.minecraft.net")
+            }
+            flatDir {
+                it.dir(File(project.gradle.gradleUserHomeDir, "caches/badlion/game-jars"))
             }
         }
 
@@ -58,14 +61,16 @@ class BadlionGradlePlugin : Plugin<Project> {
             val downloadBadlionPatches =
                 register("downloadBadlionPatches", DownloadBadlionPatchesTask::class.java).get()
             val patchMinecraft = register("patchMinecraft", PatchMinecraftTask::class.java).get()
-            val remapMinecraft = register("remapMinecraft", RemapMinecraftTask::class.java).get()
             val downloadMappings = register("downloadMappings", DownloadMappingsTask::class.java).get()
+            val remapMinecraft = register("remapMinecraft", RemapMinecraftTask::class.java).get()
+            val decompileGameTask = register("decompileGameTask", GenerateSourceJar::class.java).get()
 
             setup.group = TASK_GROUP
             downloadMinecraft.group = TASK_OTHER
             downloadBadlionPatches.group = TASK_OTHER
 
-            setup.dependsOn(remapMinecraft) // Depend on the last task to be ran and chain down them
+            setup.dependsOn(decompileGameTask) // Depend on the last task to be ran and chain down them
+            decompileGameTask.dependsOn(remapMinecraft)
             remapMinecraft.dependsOn(downloadMappings)
             downloadMappings.dependsOn(patchMinecraft)
             patchMinecraft.dependsOn(downloadBadlionPatches)
