@@ -14,6 +14,8 @@ import org.slimepowered.gradle.tasks.setup.remap.RemapMinecraftTask
 import org.slimepowered.gradle.utils.constants.TASK_GROUP
 import org.slimepowered.gradle.utils.constants.TASK_OTHER
 import org.slimepowered.gradle.extension.BadlionExtension
+import org.slimepowered.gradle.tasks.setup.download.DownloadBadlionAssets
+import org.slimepowered.gradle.tasks.setup.download.UnzipBadlionAssets
 import java.io.File
 
 class BadlionGradlePlugin : Plugin<Project> {
@@ -64,12 +66,16 @@ class BadlionGradlePlugin : Plugin<Project> {
             val downloadMappings = register("downloadMappings", DownloadMappingsTask::class.java).get()
             val remapMinecraft = register("remapMinecraft", RemapMinecraftTask::class.java).get()
             val decompileGameTask = register("decompileGameTask", GenerateSourceJar::class.java).get()
+            val downloadBadlionAssets = register("downloadBadlionAssets", DownloadBadlionAssets::class.java).get()
+            val unzipBadlionAssets = register("unzipBadlionAssets", UnzipBadlionAssets::class.java).get()
 
             setup.group = TASK_GROUP
             downloadMinecraft.group = TASK_OTHER
             downloadBadlionPatches.group = TASK_OTHER
 
-            setup.dependsOn(decompileGameTask) // Depend on the last task to be ran and chain down them
+            setup.dependsOn(unzipBadlionAssets) // Depend on the last task to be ran and chain down them
+            unzipBadlionAssets.dependsOn(downloadBadlionAssets)
+            downloadBadlionAssets.dependsOn(decompileGameTask)
             decompileGameTask.dependsOn(remapMinecraft)
             remapMinecraft.dependsOn(downloadMappings)
             downloadMappings.dependsOn(patchMinecraft)

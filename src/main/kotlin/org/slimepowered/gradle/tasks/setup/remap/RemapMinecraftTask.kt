@@ -22,6 +22,8 @@ open class RemapMinecraftTask : BadlionTask() {
 
     @TaskAction
     fun run() {
+        if (File(gameJarsDir, "minecraft-${ext.minecraft.get()}.jar").exists()) return
+
         val jar = File(gameJarsDir, "${ext.minecraft.get()}-patched.jar")
 
         val badlionMappingsFolder = badlionMappings.listFiles()?.get(0) ?: return

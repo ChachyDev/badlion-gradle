@@ -68,7 +68,7 @@ open class GenerateSourceJar : BadlionTask() {
         return decompilerProvider.decompile(bytes)
     }
 
-    fun hash(file: File): String {
+    private fun hash(file: File): String {
         file.inputStream().use {
             return DigestUtils.md5Hex(it)
         }

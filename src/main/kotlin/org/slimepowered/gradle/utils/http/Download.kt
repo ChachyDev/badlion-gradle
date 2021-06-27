@@ -21,7 +21,7 @@ suspend fun latest(repo: String): String {
 fun URL.download(dest: File): File {
     if (dest.exists()) return dest // Download if needed :)
 
-    dest.parentFile.mkdirs()
+    dest.parentFile?.mkdirs()
     dest.createNewFile()
 
     BufferedInputStream(openStream()).use { `in` ->

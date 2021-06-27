@@ -11,8 +11,12 @@ open class PatchMinecraftTask : BadlionTask() {
     fun run() {
         val gameVersion = ext.minecraft.get()
 
+        val jar = cleanJar ?: error("Could not patch the game as the clean jar is missing!")
+
+        if (!jar.exists()) error("Could not patch the game! The clean jar didn't get downloaded? Please report this to the maintainers of badlion-gradle...")
+
         patchedJar = PatchManager.patch(
-            ZipFile(cleanJar ?: error("Could not patch the game as the clean jar is missing!")),
+            ZipFile(jar),
             File(gameJarsDir, "${gameVersion}-patched.jar"),
             ZipFile(badlionPatches)
         )

@@ -7,7 +7,10 @@ import java.io.File
 
 open class BadlionTask : DefaultTask() {
     @Internal
-    val cachesDir = File(project.gradle.gradleUserHomeDir, "caches/badlion")
+    val ext: BadlionExtension = project.extensions.getByType(BadlionExtension::class.java)
+
+    @Internal
+    val cachesDir = File(project.gradle.gradleUserHomeDir, "caches/badlion/${ext.minecraft.get()}/${ext.badlion.get()}")
 
     @Internal
     val gameJarsDir = File(cachesDir, "game-jars")
@@ -17,9 +20,6 @@ open class BadlionTask : DefaultTask() {
 
     @Internal
     val patchesDir = File(gameJarsDir, "patches")
-
-    @Internal
-    val ext: BadlionExtension = project.extensions.getByType(BadlionExtension::class.java)
 
     companion object {
         var cleanJar: File? = null
@@ -37,5 +37,9 @@ open class BadlionTask : DefaultTask() {
         var finalJar: File? = null
 
         var gameSources: File? = null
+
+        var assetsDir: File? = null
+
+        var assetsZipped: File? = null
     }
 }
